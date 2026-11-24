@@ -1,0 +1,9 @@
+CARTELLA FONT SGC
+
+Il browser usa prima il font Windows installato con nome famiglia 'SGC Glyph'.
+Se il font non viene rilevato, copia qui SGC_Glyph.ttf e/o SGC_Glyph.woff2
+dalla cartella output del tuo progetto Font Builder v0.3.
+
+Percorsi attesi:
+output\SGC_Glyph.ttf
+output\SGC_Glyph.woff2
