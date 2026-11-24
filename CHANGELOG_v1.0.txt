@@ -1,0 +1,7 @@
+SGC GLYPH CONSOLE 1.0
+
+- Corretto il fulcro di rotazione dell’anello: ora il perno è esplicito al centro SVG (743, 513).
+- Rimossa la regola CSS transform-origin che poteva essere interpretata rispetto al riquadro SVG renderizzato.
+- La rotazione usa una trasformazione SVG esplicita translate-centro / rotate / translate-inverso.
+- Restano fermi telaio, pannelli, cerchi di riferimento, chevron e indicatori; ruota solo il gruppo di tacche e glifi.
+- Conservati input della v0.5, parser dei codici, blocco duplicati e origine 01 automatica.

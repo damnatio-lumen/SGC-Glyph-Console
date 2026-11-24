@@ -1,0 +1,12 @@
+RIFERIMENTI DELLA RICOSTRUZIONE
+
+Schermata SGC / dialing sequence:
+https://www.thestargatecommand.com/sg1_101_0311.jpeg
+
+Lista indirizzo e glifi numerati:
+https://www.gateworld.net/wiki/images/3/3e/Address2.jpg
+
+Sequenza del settimo chevron e stato SEQUENCE COMPLETE (episodio SG-1 1969):
+https://www.stargate-sg1-solutions.com/wiki/2.21_%221969%22_Transcript
+
+Il codice dell'interfaccia 1.0 è una ricostruzione indipendente in HTML, SVG, CSS e JavaScript.

@@ -1,0 +1,7 @@
+SGC GLYPH CONSOLE 0.9
+
+- Corretto il segno dell'angolo tra coordinate dei glifi e posizione dei chevron.
+- Aggiunta scelta dell'angolo equivalente più vicino per evitare rotazioni quasi complete non necessarie.
+- Il vettore 01 (origine terrestre) si allinea al chevron superiore senza rotazione errata di 180 gradi.
+- Aggiunti brevi impulsi grafici al blocco del chevron e della casella risultato.
+- La console di input v0.5, il parser vettoriale e il controllo duplicati sono rimasti invariati.

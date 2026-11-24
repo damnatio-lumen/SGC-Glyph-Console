@@ -1,0 +1,261 @@
+{
+  "font": "SGC Glyph",
+  "version": "0.5",
+  "layout": "Italian QWERTY",
+  "sequence_rules": {
+    "destination_glyphs": 6,
+    "duplicate_glyphs_allowed": false,
+    "earth_origin_vector": "01",
+    "origin_auto_appended": true
+  },
+  "mapping": [
+    {
+      "vector_number": "01",
+      "keyboard_key": "1",
+      "unicode": "U+0031",
+      "role": "Earth / point of origin"
+    },
+    {
+      "vector_number": "02",
+      "keyboard_key": "2",
+      "unicode": "U+0032",
+      "role": "Milky Way glyph"
+    },
+    {
+      "vector_number": "03",
+      "keyboard_key": "3",
+      "unicode": "U+0033",
+      "role": "Milky Way glyph"
+    },
+    {
+      "vector_number": "04",
+      "keyboard_key": "4",
+      "unicode": "U+0034",
+      "role": "Milky Way glyph"
+    },
+    {
+      "vector_number": "05",
+      "keyboard_key": "5",
+      "unicode": "U+0035",
+      "role": "Milky Way glyph"
+    },
+    {
+      "vector_number": "06",
+      "keyboard_key": "6",
+      "unicode": "U+0036",
+      "role": "Milky Way glyph"
+    },
+    {
+      "vector_number": "07",
+      "keyboard_key": "7",
+      "unicode": "U+0037",
+      "role": "Milky Way glyph"
+    },
+    {
+      "vector_number": "08",
+      "keyboard_key": "8",
+      "unicode": "U+0038",
+      "role": "Milky Way glyph"
+    },
+    {
+      "vector_number": "09",
+      "keyboard_key": "9",
+      "unicode": "U+0039",
+      "role": "Milky Way glyph"
+    },
+    {
+      "vector_number": "10",
+      "keyboard_key": "0",
+      "unicode": "U+0030",
+      "role": "Milky Way glyph"
+    },
+    {
+      "vector_number": "11",
+      "keyboard_key": "A",
+      "unicode": "U+0041",
+      "role": "Milky Way glyph"
+    },
+    {
+      "vector_number": "12",
+      "keyboard_key": "B",
+      "unicode": "U+0042",
+      "role": "Milky Way glyph"
+    },
+    {
+      "vector_number": "13",
+      "keyboard_key": "C",
+      "unicode": "U+0043",
+      "role": "Milky Way glyph"
+    },
+    {
+      "vector_number": "14",
+      "keyboard_key": "D",
+      "unicode": "U+0044",
+      "role": "Milky Way glyph"
+    },
+    {
+      "vector_number": "15",
+      "keyboard_key": "E",
+      "unicode": "U+0045",
+      "role": "Milky Way glyph"
+    },
+    {
+      "vector_number": "16",
+      "keyboard_key": "F",
+      "unicode": "U+0046",
+      "role": "Milky Way glyph"
+    },
+    {
+      "vector_number": "17",
+      "keyboard_key": "G",
+      "unicode": "U+0047",
+      "role": "Milky Way glyph"
+    },
+    {
+      "vector_number": "18",
+      "keyboard_key": "H",
+      "unicode": "U+0048",
+      "role": "Milky Way glyph"
+    },
+    {
+      "vector_number": "19",
+      "keyboard_key": "I",
+      "unicode": "U+0049",
+      "role": "Milky Way glyph"
+    },
+    {
+      "vector_number": "20",
+      "keyboard_key": "J",
+      "unicode": "U+004A",
+      "role": "Milky Way glyph"
+    },
+    {
+      "vector_number": "21",
+      "keyboard_key": "K",
+      "unicode": "U+004B",
+      "role": "Milky Way glyph"
+    },
+    {
+      "vector_number": "22",
+      "keyboard_key": "L",
+      "unicode": "U+004C",
+      "role": "Milky Way glyph"
+    },
+    {
+      "vector_number": "23",
+      "keyboard_key": "M",
+      "unicode": "U+004D",
+      "role": "Milky Way glyph"
+    },
+    {
+      "vector_number": "24",
+      "keyboard_key": "N",
+      "unicode": "U+004E",
+      "role": "Milky Way glyph"
+    },
+    {
+      "vector_number": "25",
+      "keyboard_key": "O",
+      "unicode": "U+004F",
+      "role": "Milky Way glyph"
+    },
+    {
+      "vector_number": "26",
+      "keyboard_key": "P",
+      "unicode": "U+0050",
+      "role": "Milky Way glyph"
+    },
+    {
+      "vector_number": "27",
+      "keyboard_key": "Q",
+      "unicode": "U+0051",
+      "role": "Milky Way glyph"
+    },
+    {
+      "vector_number": "28",
+      "keyboard_key": "R",
+      "unicode": "U+0052",
+      "role": "Milky Way glyph"
+    },
+    {
+      "vector_number": "29",
+      "keyboard_key": "S",
+      "unicode": "U+0053",
+      "role": "Milky Way glyph"
+    },
+    {
+      "vector_number": "30",
+      "keyboard_key": "T",
+      "unicode": "U+0054",
+      "role": "Milky Way glyph"
+    },
+    {
+      "vector_number": "31",
+      "keyboard_key": "U",
+      "unicode": "U+0055",
+      "role": "Milky Way glyph"
+    },
+    {
+      "vector_number": "32",
+      "keyboard_key": "V",
+      "unicode": "U+0056",
+      "role": "Milky Way glyph"
+    },
+    {
+      "vector_number": "33",
+      "keyboard_key": "W",
+      "unicode": "U+0057",
+      "role": "Milky Way glyph"
+    },
+    {
+      "vector_number": "34",
+      "keyboard_key": "X",
+      "unicode": "U+0058",
+      "role": "Milky Way glyph"
+    },
+    {
+      "vector_number": "35",
+      "keyboard_key": "Y",
+      "unicode": "U+0059",
+      "role": "Milky Way glyph"
+    },
+    {
+      "vector_number": "36",
+      "keyboard_key": "Z",
+      "unicode": "U+005A",
+      "role": "Milky Way glyph"
+    },
+    {
+      "vector_number": "37",
+      "keyboard_key": ",",
+      "unicode": "U+002C",
+      "role": "Milky Way glyph"
+    },
+    {
+      "vector_number": "38",
+      "keyboard_key": ".",
+      "unicode": "U+002E",
+      "role": "Milky Way glyph"
+    },
+    {
+      "vector_number": "39",
+      "keyboard_key": "-",
+      "unicode": "U+002D",
+      "role": "Milky Way glyph"
+    }
+  ],
+  "input_modes": {
+    "glyph_keyboard": "Ogni tasto italiano corrisponde a un singolo glifo tramite keyboard_key.",
+    "vector_code": "Sei identificativi numerici completi separati da trattino, spazio, virgola o punto e virgola; esempio 27-07-15-32-12-30."
+  },
+  "vector_code_rules": {
+    "tokens_required": 6,
+    "valid_vector_range": [
+      "01",
+      "39"
+    ],
+    "origin_vector_reserved": "01",
+    "duplicate_vector_allowed": false,
+    "origin_auto_appended": true
+  }
+}

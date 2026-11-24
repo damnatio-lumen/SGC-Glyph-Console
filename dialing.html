@@ -1,0 +1,299 @@
+<!doctype html>
+<html lang="it">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="theme-color" content="#061019">
+<title>SGC · Dialing Sequence Display</title>
+<style>
+@font-face{font-family:SGCGlyph;src:local('SGC Glyph'),url('output/SGC_Glyph.woff2') format('woff2'),url('output/SGC_Glyph.ttf') format('truetype');font-weight:400;font-style:normal;font-display:swap}
+:root{color-scheme:dark;--bg:#03080d;--blue:#37b9e9;--blue2:#86eaff;--line:#17658c;--red:#e3483c;--amber:#e8a35b;--white:#def7ff;--dim:#4e94b5}
+*{box-sizing:border-box}html,body{margin:0;min-height:100%;background:radial-gradient(ellipse at 50% 45%,#0a2230 0,#030a11 58%,#010407 100%);color:var(--white);font-family:Consolas,'Segoe UI',monospace}
+body{min-height:100vh;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:12px;overflow-x:hidden}
+.toolbar{width:min(98vw,1491px);display:flex;align-items:center;justify-content:space-between;gap:10px;margin:0 auto 9px;color:#8ebfd0;font-size:10px;letter-spacing:.14em;text-transform:uppercase}
+.toolbar .left,.toolbar .right{display:flex;align-items:center;gap:8px;flex-wrap:wrap}.toolbar button{border:1px solid #28647a;background:#09202d;color:#c9f3ff;padding:8px 12px;font:11px Consolas,monospace;letter-spacing:.1em;cursor:pointer}.toolbar button:hover{background:#10394a;border-color:#67d9f0}.toolbar button:disabled{opacity:.35;cursor:not-allowed}.toolbar .alert{color:#f0b86d}
+.screen-wrap{width:min(98vw,calc((100vh - 82px)*1.388));max-width:1491px;aspect-ratio:1491/1074;border:2px solid #27566d;border-radius:9px;background:#02070b;padding:4px;box-shadow:0 0 34px #008cc133,inset 0 0 30px #008cc11a;position:relative}
+svg{display:block;width:100%;height:100%;background:#02080e}
+.outer-frame{fill:#020912;stroke:#1680ad;stroke-width:3}.inner-frame{fill:none;stroke:#155d81;stroke-width:1.5}.frame-glow{fill:none;stroke:#32bce9;stroke-width:1;opacity:.4}
+.hud{fill:none;stroke:#1e88b8;stroke-width:2;opacity:.92}.hud-thin{fill:none;stroke:#17658b;stroke-width:1.2;opacity:.85}.hud-fill{fill:#061722;stroke:#1f82ad;stroke-width:1.4}.hud-text{fill:#65c9ed;font-family:Consolas,monospace;letter-spacing:1.5px}.hud-muted{fill:#287ba2;font-family:Consolas,monospace}.tiny{font-size:13px}.small{font-size:17px}.medium{font-size:23px}.large{font-size:29px}.bright{fill:#d5f6ff}.blue-glow{filter:url(#blueGlow)}
+.timer-ring{fill:none;stroke:#287da0;stroke-width:2;stroke-dasharray:3 7}.timer-arc{fill:none;stroke:#75d9f5;stroke-width:3;stroke-dasharray:220 310;transform-origin:150px 287px;transform:rotate(-60deg)}
+.gate-fixed{fill:none;stroke:#2d8db9;stroke-width:2}.gate-fixed-dim{fill:none;stroke:#174d69;stroke-width:1.3}.rotating-ring circle,.rotating-ring path,.rotating-ring line{vector-effect:non-scaling-stroke}.ring-symbol{font-family:SGCGlyph,'Segoe UI Symbol',sans-serif;fill:#72c9e8;font-size:22px;text-anchor:middle;dominant-baseline:middle;opacity:.9}.ring-symbol.origin{fill:#d2f8ff}.ring-tick{stroke:#236c91;stroke-width:1.1}.ring-tick.major{stroke:#54b9df;stroke-width:2}.gate-cross{stroke:#266d8c;stroke-width:1;opacity:.45}.chevron{fill:#071521;stroke:#3a8db2;stroke-width:4;stroke-linejoin:round;opacity:.8}.chevron.active{fill:#3c1112;stroke:#f04d42;stroke-width:6;filter:url(#redGlow);opacity:1;animation:chevronLock .52s ease-out 1}.chevron.active path{stroke:#ff8b71}.chevron.unused{opacity:.35}.circuit{fill:none;stroke:#27799e;stroke-width:2;opacity:.75}.circuit.active{stroke:#f05246;stroke-width:3.2;filter:url(#redGlow);opacity:1}.result-box{fill:#030c14;stroke:#287fa8;stroke-width:2}.result-box.active{stroke:#e95b4e;stroke-width:3;filter:url(#redGlow);animation:resultLock .48s ease-out 1}.result-top{stroke:#63bce2;stroke-width:5}.result-index{fill:#90d8f4;font-size:24px;text-anchor:end}.result-glyph{font-family:SGCGlyph,'Segoe UI Symbol',sans-serif;fill:#e1fbff;font-size:54px;text-anchor:middle;dominant-baseline:middle;opacity:0}.result-glyph.visible{opacity:1}.result-code{fill:#3b8db2;font-size:12px;text-anchor:middle}.hero-glyph{font-family:SGCGlyph,'Segoe UI Symbol',sans-serif;fill:#ddfaff;stroke:#a6f0ff;stroke-width:1.8;paint-order:stroke fill;text-anchor:middle;dominant-baseline:middle;filter:url(#blueGlow);opacity:0}.fly-glyph{font-family:SGCGlyph,'Segoe UI Symbol',sans-serif;fill:#e6fdff;stroke:#a6f0ff;stroke-width:1.4;paint-order:stroke fill;text-anchor:middle;dominant-baseline:middle;filter:url(#blueGlow)}
+.status-line{fill:#d3f7ff;font-size:25px;letter-spacing:2.5px}.progress-caption{fill:#62c7ea;font-size:15px;letter-spacing:1.5px}.progress-bar{fill:#12364a;stroke:#297ca1;stroke-width:1}.progress-seg{fill:#092234;stroke:#1c6285;stroke-width:1}.progress-seg.done{fill:#de5147;stroke:#ff8a6f;filter:url(#redGlow)}.check-row{fill:none;stroke:#256c8d;stroke-width:1}.check-box{fill:#06131d;stroke:#2e83a8;stroke-width:1.3}.check-box.done{fill:#bb4239;stroke:#ff8674}.check-text{fill:#5eb5dc;font-size:19px}.check-ok{fill:#a5edff;font-size:13px;letter-spacing:1px}.left-bar{fill:#9b3a34;opacity:.22}.left-bar.done{opacity:.95;filter:url(#redGlow)}
+.diagnostic-cell{fill:#071c28;stroke:#1d5875;stroke-width:1}.diagnostic-fill{fill:#2b91bd}.scan{stroke:#64d9f6;stroke-width:1.5;opacity:.6;animation:scan 3.8s linear infinite}.blink{animation:blink 1s steps(2,end) infinite}.pulse{animation:pulse 1.6s ease-in-out infinite}@keyframes scan{from{transform:translateY(0)}to{transform:translateY(48px)}}@keyframes blink{50%{opacity:.15}}@keyframes pulse{50%{opacity:.5}}@keyframes chevronLock{0%{opacity:.35}45%{opacity:1;stroke-width:9}100%{opacity:1;stroke-width:6}}@keyframes resultLock{0%{stroke-width:2;opacity:.55}55%{stroke-width:5;opacity:1}100%{stroke-width:3;opacity:1}}
+@media(prefers-reduced-motion:reduce){.scan,.blink,.pulse,.chevron.active,.result-box.active{animation:none!important}}
+@media(max-width:850px){body{justify-content:flex-start}.toolbar{font-size:8px}.toolbar button{padding:6px 8px;font-size:9px}.screen-wrap{width:98vw;max-width:none}.tiny{font-size:15px}}
+</style>
+</head>
+<body>
+<div class="toolbar">
+ <div class="left"><span>SGC / CHEYENNE MOUNTAIN</span><span>·</span><span>GATE CONTROL MONITOR 01</span></div>
+ <div class="right"><span id="fontNotice" class="alert" hidden>SGC GLYPH FONT NON RILEVATO</span><button id="replayBtn" disabled>REPLAY</button><button id="backBtn">BACK TO INPUT</button></div>
+</div>
+<div class="screen-wrap" aria-label="Replica della schermata computer SGC durante il dialing">
+<svg id="sgcDisplay" viewBox="0 0 1491 1074" role="img" aria-label="SGC dialing sequence display">
+ <defs>
+  <filter id="blueGlow" x="-80%" y="-80%" width="260%" height="260%"><feGaussianBlur stdDeviation="4" result="b"/><feMerge><feMergeNode in="b"/><feMergeNode in="SourceGraphic"/></feMerge></filter>
+  <filter id="redGlow" x="-80%" y="-80%" width="260%" height="260%"><feGaussianBlur stdDeviation="3" result="b"/><feMerge><feMergeNode in="b"/><feMergeNode in="SourceGraphic"/></feMerge></filter>
+  <linearGradient id="screenShade" x1="0" y1="0" x2="0" y2="1"><stop stop-color="#061622"/><stop offset=".5" stop-color="#020b13"/><stop offset="1" stop-color="#01060b"/></linearGradient>
+  <clipPath id="screenClip"><rect x="30" y="13" width="1429" height="1055" rx="22"/></clipPath>
+ </defs>
+ <rect class="outer-frame" x="29" y="12" width="1430" height="1055" rx="22"/>
+ <rect class="inner-frame" x="40" y="23" width="1408" height="1033" rx="15"/>
+ <g clip-path="url(#screenClip)">
+  <rect x="31" y="14" width="1427" height="1052" fill="url(#screenShade)"/>
+  <!-- Left information rail -->
+  <rect x="47" y="30" width="128" height="120" rx="5" class="hud-fill"/>
+  <circle cx="111" cy="81" r="36" class="hud blue-glow"/>
+  <path d="M111 50 L119 73 L142 81 L119 89 L111 112 L103 89 L80 81 L103 73 Z" fill="none" stroke="#8beaff" stroke-width="2"/>
+  <text x="111" y="137" class="hud-text tiny" text-anchor="middle">SGC</text>
+  <path d="M188 25V1044" class="hud-thin"/>
+  <path d="M300 25V1044" class="hud-thin"/>
+  <g id="timerPanel">
+   <circle cx="150" cy="287" r="84" class="timer-ring"/>
+   <circle cx="150" cy="287" r="84" class="timer-arc"/>
+   <path d="M150 197V211 M150 363V377 M60 287H74 M226 287H240" class="hud"/>
+   <text x="150" y="278" class="hud-text large bright" text-anchor="middle" id="clockText">00:00</text>
+   <text x="150" y="310" class="hud-text small" text-anchor="middle" id="dateText">SGC LOCAL</text>
+   <text x="150" y="342" class="hud-text tiny" text-anchor="middle">SYSTEM TIME</text>
+  </g>
+  <g id="numberGrid">
+   <g transform="translate(83 408)"><rect width="75" height="65" class="diagnostic-cell"/><text x="37" y="31" class="hud-text medium" text-anchor="middle">02</text><path d="M10 49h9v7h-9z M23 45h9v11h-9z M36 51h9v5h-9z M49 43h16v13H49z" class="diagnostic-fill"/></g>
+   <g transform="translate(190 408)"><rect width="75" height="65" class="diagnostic-cell"/><text x="37" y="31" class="hud-text medium" text-anchor="middle">08</text><path d="M10 53h9v3h-9z M23 47h9v9h-9z M36 43h9v13h-9z M49 48h16v8H49z" class="diagnostic-fill"/></g>
+   <g transform="translate(83 493)"><rect width="75" height="65" class="diagnostic-cell"/><text x="37" y="31" class="hud-text medium" text-anchor="middle">04</text><path d="M10 46h9v10h-9z M23 51h9v5h-9z M36 44h9v12h-9z M49 49h16v7H49z" class="diagnostic-fill"/></g>
+   <g transform="translate(190 493)"><rect width="75" height="65" class="diagnostic-cell"/><text x="37" y="31" class="hud-text medium" text-anchor="middle">01</text><path d="M10 51h9v5h-9z M23 42h9v14h-9z M36 48h9v8h-9z M49 45h16v11H49z" class="diagnostic-fill"/></g>
+   <g transform="translate(83 578)"><rect width="75" height="65" class="diagnostic-cell"/><text x="37" y="31" class="hud-text medium" text-anchor="middle">01</text><path d="M10 52h9v4h-9z M23 46h9v10h-9z M36 50h9v6h-9z M49 43h16v13H49z" class="diagnostic-fill"/></g>
+   <g transform="translate(190 578)"><rect width="75" height="65" class="diagnostic-cell"/><text x="37" y="31" class="hud-text medium" text-anchor="middle">04</text><path d="M10 48h9v8h-9z M23 50h9v6h-9z M36 42h9v14h-9z M49 47h16v9H49z" class="diagnostic-fill"/></g>
+  </g>
+  <text x="42" y="704" class="hud-text small" id="statusLabel">STATUS: DIALING SEQUENCE</text>
+  <rect x="64" y="733" width="216" height="268" rx="3" class="hud-fill"/>
+  <path d="M275 733V1001" class="hud"/>
+  <g id="checklist"></g>
+  <!-- Main circular gate schematic -->
+  <g id="gateDisplay">
+   <circle cx="743" cy="513" r="315" class="gate-fixed"/>
+   <circle cx="743" cy="513" r="307" class="gate-fixed-dim"/>
+   <circle cx="743" cy="513" r="284" class="gate-fixed-dim"/>
+   <circle cx="743" cy="513" r="207" class="gate-fixed-dim"/>
+   <circle cx="743" cy="513" r="188" class="gate-fixed"/>
+   <circle cx="743" cy="513" r="175" class="gate-fixed-dim"/>
+   <path d="M743 190V836 M420 513H1066 M514 284L972 742 M972 284L514 742" class="gate-cross"/>
+   <g id="rotatingRing" class="rotating-ring"></g>
+   <g id="circuitLayer"></g>
+   <g id="chevronLayer"></g>
+   <circle cx="743" cy="513" r="130" fill="#020b13" stroke="#174a66" stroke-width="2"/>
+   <circle cx="743" cy="513" r="115" fill="none" stroke="#236f92" stroke-width="1.5" stroke-dasharray="3 10"/>
+   <path d="M743 376V650 M606 513H880" class="gate-cross"/>
+   <circle cx="743" cy="513" r="5" fill="#8ce8ff" class="blue-glow"/>
+   <text id="heroGlyph" x="743" y="525" class="hero-glyph" font-size="260"> </text>
+   <text id="flyGlyph" x="743" y="525" class="fly-glyph" font-size="170" opacity="0"> </text>
+  </g>
+  <g id="resultBoxLayer"></g>
+  <!-- Bottom title and diagnostics -->
+  <text x="743" y="896" class="hud-text progress-caption" text-anchor="middle">SGC / OUTBOUND DIALING SUBSYSTEM</text>
+  <text x="743" y="962" class="status-line" text-anchor="middle" id="sequenceStatus">SEQUENCE IN PROGRESS</text>
+  <rect x="332" y="888" width="805" height="113" rx="4" class="hud-fill" opacity=".35"/>
+  <text x="307" y="826" class="hud-text tiny">LST CODE #1</text>
+  <text x="1016" y="826" class="hud-text tiny">LST CODE #2</text>
+  <text x="292" y="1040" class="hud-text tiny">AUTHORIZATION CODE:</text>
+  <g id="authSegments"></g>
+  <text x="1245" y="1021" class="hud-text tiny">USER: SGT. W. HARRIMAN</text>
+  <text x="1245" y="1046" class="hud-text tiny">SYS: NOMINAL</text>
+  <path d="M187 152H1175 M187 148H1175 M1175 152V25" class="hud-thin"/>
+  <text x="200" y="55" class="hud-text small">STARGATE COMMAND · GATE CONTROL</text>
+  <text x="200" y="88" class="hud-muted tiny">DESTINATION:</text>
+  <text id="destinationName" x="332" y="88" class="hud-text medium bright">ABYDOS</text>
+  <text x="1112" y="73" class="hud-muted tiny">ADDRESS TRACK</text>
+  <text id="addressHeader" x="1112" y="108" class="hud-text small">27-07-15-32-12-30</text>
+  <g id="progressSegments"></g>
+  <path d="M32 14H1458 M32 1066H1458" class="frame-glow"/>
+ </g>
+</svg>
+</div>
+<script>
+'use strict';
+const SVG_NS='http://www.w3.org/2000/svg';
+const $=id=>document.getElementById(id);
+const params=new URLSearchParams(location.search);
+const addressRaw=params.get('address')||'';
+const sourceMode=params.get('mode')==='vector'?'vector':'glyph';
+const map=[];
+for(let n=1;n<=39;n++){
+ const key=n<=9?String(n):n===10?'0':n<=36?String.fromCharCode(65+n-11):n===37?',':n===38?'.':'-';
+ map.push({n,key,vector:String(n).padStart(2,'0')});
+}
+const byVector=new Map(map.map(x=>[x.vector,x]));
+const lockAngles=[50,10,330,210,170,130,90];
+const physicalAngles=[90,50,10,330,290,250,210,170,130];
+const cx=743,cy=513,outerR=315;
+let selected=[],running=false,stopRequested=false,rotationNow=0;
+function svg(tag,attrs={},parent){const el=document.createElementNS(SVG_NS,tag);for(const [k,v] of Object.entries(attrs))el.setAttribute(k,String(v));if(parent)parent.appendChild(el);return el;}
+function wait(ms){return new Promise(resolve=>setTimeout(resolve,ms));}
+function setText(id,text){$(id).textContent=text;}
+function setDestinationLabel(){
+ const code=selected.map(x=>x.vector).join('-');
+ const dest=code==='27-07-15-32-12-30'?'ABYDOS':code==='28-26-05-36-11-29'?'EARTH':'UNLISTED ADDRESS';
+ setText('destinationName',dest);setText('addressHeader',code);
+ const now=new Date();setText('clockText',now.toLocaleTimeString('it-IT',{hour:'2-digit',minute:'2-digit'}));setText('dateText',now.toLocaleDateString('it-IT',{day:'2-digit',month:'2-digit',year:'2-digit'}));
+}
+function buildRing(){
+ const g=$('rotatingRing');
+ [286,274,262,236,219].forEach((r,i)=>svg('circle',{cx,cy,r,fill:'none',class:i<2?'gate-fixed-dim':'gate-fixed',opacity:i===4?.55:1},g));
+ const tickGroup=svg('g',{},g);
+ for(let i=0;i<184;i++){
+  const a=(-90+i*360/184)*Math.PI/180;const major=i%4===0;const r1=major?264:268,r2=major?282:277;
+  svg('line',{x1:cx+Math.cos(a)*r1,y1:cy+Math.sin(a)*r1,x2:cx+Math.cos(a)*r2,y2:cy+Math.sin(a)*r2,class:'ring-tick'+(major?' major':'')},tickGroup);
+ }
+ const symGroup=svg('g',{},g);
+ map.forEach(item=>{
+  const a=(-90+(item.n-1)*360/39)*Math.PI/180;const x=cx+Math.cos(a)*238,y=cy+Math.sin(a)*238;
+  const t=svg('text',{x,y,class:'ring-symbol'+(item.n===1?' origin':''),transform:`rotate(${(-90+(item.n-1)*360/39)+90} ${x.toFixed(1)} ${y.toFixed(1)})`},symGroup);
+  t.textContent=item.key;t.dataset.vector=item.vector;
+ });
+}
+function buildChevrons(){
+ const g=$('chevronLayer');
+ physicalAngles.forEach((angle,index)=>{
+  const a=angle*Math.PI/180,x=cx+Math.cos(a)*292,y=cy-Math.sin(a)*292;
+  const gr=svg('g',{transform:`translate(${x.toFixed(1)} ${y.toFixed(1)}) rotate(${90-angle})`,class:'chevron-wrap',id:'chev'+angle},g);
+  svg('path',{d:'M-25 -15 L0 17 L25 -15 L17 -15 L0 7 L-17 -15 Z',class:'chevron'+(index===4||index===5?' unused':'')},gr);
+  svg('path',{d:'M-14 -10 L0 8 L14 -10',fill:'none',stroke:'#79cce8','stroke-width':1.5,opacity:.55},gr);
+ });
+}
+function buildResults(){
+ const g=$('resultBoxLayer');
+ for(let i=0;i<7;i++){
+  const y=165+i*117.5;
+  const group=svg('g',{id:'result'+i},g);
+  svg('text',{x:1207,y:y+61,class:'result-index'},group).textContent=String(i+1);
+  svg('rect',{x:1238,y,width:129,height:101,rx:2,class:'result-box',id:'resultBox'+i},group);
+  svg('line',{x1:1238,y1:y+3,x2:1367,y2:y+3,class:'result-top'},group);
+  svg('text',{x:1302.5,y:y+54,class:'result-glyph',id:'resultGlyph'+i},group);
+  svg('text',{x:1302.5,y:y+88,class:'result-code',id:'resultCode'+i},group);
+ }
+}
+function buildCircuits(){
+ const g=$('circuitLayer');
+ lockAngles.forEach((angle,i)=>{
+  const a=angle*Math.PI/180;const tx=cx+Math.cos(a)*292,ty=cy-Math.sin(a)*292;const boxY=165+i*117.5+50;
+  let d;
+  if(i<3){d=`M 1238 ${boxY.toFixed(1)} L 1150 ${boxY.toFixed(1)} L ${tx.toFixed(1)} ${ty.toFixed(1)}`;}
+  else {const lane=1400+(i-3)*11,rail=145-i*10;d=`M 1367 ${boxY.toFixed(1)} L ${lane} ${boxY.toFixed(1)} L ${lane} ${rail} L 305 ${rail} L 305 ${ty.toFixed(1)} L ${tx.toFixed(1)} ${ty.toFixed(1)}`;}
+  const path=svg('path',{d,class:'circuit',id:'circuit'+i},g);
+ });
+}
+function buildChecklist(){
+ const g=$('checklist');
+ for(let i=0;i<7;i++){
+  const y=765+i*33;
+  svg('rect',{x:83,y:y-14,width:14,height:14,class:'check-box',id:'checkBox'+i},g);
+  svg('rect',{x:105,y:y-12,width:42,height:8,rx:1,class:'left-bar',id:'checkBar'+i},g);
+  svg('text',{x:167,y:y+4,class:'check-text'},g).textContent=String(i+1);
+  svg('text',{x:190,y:y+3,class:'check-ok',id:'checkText'+i},g).textContent='';
+  svg('rect',{x:249,y:y-14,width:15,height:14,class:'check-row'},g);
+ }
+}
+function buildProgress(){
+ const g=$('progressSegments');
+ for(let i=0;i<7;i++){svg('rect',{x:332+i*115,y:1010,width:102,height:12,class:'progress-seg',id:'pseg'+i},g);}
+ const auth=$('authSegments');
+ for(let i=0;i<13;i++){const x=628+i*39;svg('rect',{x,y:1016,width:31,height:18,class:'hud-thin',opacity:.9},auth);}
+}
+function validateAddress(raw){
+ const tokens=String(raw).trim().split(/[-\s,;|]+/).filter(Boolean);
+ if(tokens.length!==6)throw new Error('Indirizzo non valido: servono sei codici vettoriali.');
+ if(tokens.some(t=>!/^\d{1,2}$/.test(t)))throw new Error('Codice non valido: ogni elemento deve essere un numero da 01 a 39.');
+ const nums=tokens.map(Number);if(nums.some(n=>n<2||n>39))throw new Error('Il vettore 01 è riservato all’origine; i codici di destinazione validi sono 02–39.');
+ const normalized=nums.map(n=>String(n).padStart(2,'0'));if(new Set(normalized).size!==6)throw new Error('Indirizzo non valido: i sei glifi devono essere unici.');
+ return normalized.map(v=>byVector.get(v)).concat(byVector.get('01'));
+}
+function nearestEquivalentAngle(target,current){
+ // SVG positive angles run clockwise on screen. Pick the equivalent target
+ // within +/-180 degrees of the current ring position to avoid near-full spins.
+ return target + 360 * Math.round((current - target) / 360);
+}
+function ringTransform(degrees){
+ // Keep the rotation pivot in SVG user-space. Explicit translate/rotate/translate
+ // avoids CSS transform-origin being interpreted against the rendered SVG box.
+ return `translate(${cx} ${cy}) rotate(${degrees}) translate(${-cx} ${-cy})`;
+}
+function animateRing(to,duration=750){
+ const from=rotationNow,start=performance.now();
+ return new Promise(resolve=>{
+  function frame(now){
+   const t=Math.min(1,(now-start)/duration);
+   const ease=t<.5?4*t*t*t:1-Math.pow(-2*t+2,3)/2;
+   rotationNow=from+(to-from)*ease;
+   $('rotatingRing').setAttribute('transform',ringTransform(rotationNow));
+   if(t<1)requestAnimationFrame(frame);else{rotationNow=to;$('rotatingRing').setAttribute('transform',ringTransform(to));resolve();}
+  }
+  requestAnimationFrame(frame);
+ });
+}
+function ringTargetForChevron(item,chevronAngle){
+ // Glyph positions use SVG coordinates (0° right, +90° down). The chevron
+ // layout is authored with an inverted Y axis, so its matching SVG angle is -chevronAngle.
+ const glyphAngle=-90+(item.n-1)*360/39;
+ const desiredSvgAngle=-chevronAngle;
+ const canonicalTarget=desiredSvgAngle-glyphAngle;
+ return nearestEquivalentAngle(canonicalTarget,rotationNow);
+}
+function animateFly(item,index,duration=620){
+ const el=$('flyGlyph'),boxY=165+index*117.5+54;const start={x:cx,y:cy+10,size:210};const end={x:1302.5,y:boxY,size:51};const startTime=performance.now();
+ el.textContent=item.key;el.setAttribute('opacity','1');
+ return new Promise(resolve=>{
+  function frame(now){const t=Math.min(1,(now-startTime)/duration),e=1-Math.pow(1-t,3);el.setAttribute('x',(start.x+(end.x-start.x)*e).toFixed(1));el.setAttribute('y',(start.y+(end.y-start.y)*e).toFixed(1));el.setAttribute('font-size',(start.size+(end.size-start.size)*e).toFixed(1));el.setAttribute('opacity',String(1-.35*e));if(t<1)requestAnimationFrame(frame);else{el.setAttribute('opacity','0');resolve();}}
+  requestAnimationFrame(frame);
+ });
+}
+function markLocked(index,item){
+ const angle=lockAngles[index];const chev=$('chev'+angle);if(chev){const p=chev.querySelector('path');if(p)p.classList.add('active');}
+ $('circuit'+index)?.classList.add('active');$('resultBox'+index).classList.add('active');
+ const glyph=$('resultGlyph'+index);glyph.textContent=item.key;glyph.classList.add('visible');$('resultCode'+index).textContent='VEC '+item.vector;
+ $('checkBox'+index).classList.add('done');$('checkBar'+index).classList.add('done');setText('checkText'+index,'OK');$('pseg'+index).classList.add('done');
+}
+function heroShow(item){const h=$('heroGlyph');h.textContent=item.key;h.setAttribute('opacity','1');return wait(340).then(()=>h.setAttribute('opacity','0'));}
+async function runSequence(){
+ if(running)return;running=true;stopRequested=false;$('replayBtn').disabled=true;
+ // Reset the animation-only layers; the entered address itself remains unchanged.
+ rotationNow=0;$('rotatingRing').setAttribute('transform',ringTransform(0));
+ for(let i=0;i<7;i++){
+  const angle=lockAngles[i],item=selected[i];
+  if(stopRequested)break;
+  setText('statusLabel','STATUS: DIALING SEQUENCE');setText('sequenceStatus','SEQUENCE IN PROGRESS');
+  const target=ringTargetForChevron(item,angle);
+  await animateRing(target,820);if(stopRequested)break;
+  await heroShow(item);if(stopRequested)break;
+  await animateFly(item,i,700);if(stopRequested)break;
+  markLocked(i,item);
+  setText('sequenceStatus',i===6?'SEQUENCE COMPLETE':'SEQUENCE IN PROGRESS');
+  await wait(i===6?900:360);
+ }
+ if(!stopRequested){setText('statusLabel','STATUS: SEQUENCE COMPLETE');setText('sequenceStatus','SEQUENCE COMPLETE');$('replayBtn').disabled=false;}
+ else {setText('statusLabel','STATUS: SEQUENCE ABORTED');setText('sequenceStatus','SEQUENCE ABORTED');$('replayBtn').disabled=false;}
+ running=false;
+}
+function resetDisplay(){
+ stopRequested=true;
+ for(let i=0;i<7;i++){
+  const a=lockAngles[i],chev=$('chev'+a);if(chev){chev.querySelector('path')?.classList.remove('active');}
+  $('circuit'+i).classList.remove('active');$('resultBox'+i).classList.remove('active');$('resultGlyph'+i).textContent='';$('resultGlyph'+i).classList.remove('visible');$('resultCode'+i).textContent='';$('checkBox'+i).classList.remove('done');$('checkBar'+i).classList.remove('done');setText('checkText'+i,'');$('pseg'+i).classList.remove('done');
+ }
+ $('heroGlyph').setAttribute('opacity','0');$('flyGlyph').setAttribute('opacity','0');
+ setText('statusLabel','STATUS: DIALING SEQUENCE');setText('sequenceStatus','SEQUENCE IN PROGRESS');
+}
+function init(){
+ $('backBtn').onclick=()=>{const p=new URLSearchParams();if(addressRaw)p.set('address',addressRaw);p.set('mode',sourceMode);location.href='preview.html?'+p.toString();};
+ try{selected=validateAddress(addressRaw);}catch(err){setText('statusLabel','STATUS: INVALID ADDRESS');setText('sequenceStatus',err.message.toUpperCase());$('replayBtn').disabled=true;return;}
+ // The seven-symbol list always has six destination vectors followed by origin vector 01.
+ setDestinationLabel();setText('addressHeader',selected.slice(0,6).map(x=>x.vector).join('-'));
+ buildRing();buildChevrons();buildResults();buildCircuits();buildChecklist();buildProgress();
+ const auth=selected.slice(0,6).map(x=>x.vector).join('');
+ for(let i=0;i<13;i++){const t=svg('text',{x:643+i*39,y:1031,class:'hud-text tiny', 'text-anchor':'middle'},$('authSegments'));t.textContent=auth[i]||'·';}
+ if(!document.fonts.check('24px SGCGlyph'))$('fontNotice').hidden=false;
+ $('backBtn').onclick=()=>{const p=new URLSearchParams({address:selected.slice(0,6).map(x=>x.vector).join('-'),mode:sourceMode});location.href='preview.html?'+p.toString();};
+ $('replayBtn').onclick=()=>{resetDisplay();setTimeout(()=>runSequence(),80);};
+ runSequence();
+}
+init();
+</script>
+</body></html>

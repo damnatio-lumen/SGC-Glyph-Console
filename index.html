@@ -1,0 +1,172 @@
+<!doctype html>
+<html lang="it">
+<head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>SGC · Input Console 1.0</title>
+<style>
+@font-face{font-family:SGCGlyph;src:local('SGC Glyph'),url('output/SGC_Glyph.woff2') format('woff2'),url('output/SGC_Glyph.ttf') format('truetype');font-weight:400;font-style:normal;font-display:swap}
+:root{color-scheme:dark;--bg:#061018;--panel:#0c1b25;--line:#294653;--muted:#8ba4ad;--cyan:#8be8ed;--gold:#f0c674;--red:#ff8d83;--green:#8ee0b1}
+*{box-sizing:border-box}body{margin:0;background:radial-gradient(ellipse at 50% -20%,#15303b 0,var(--bg) 58%);color:#dce9ed;font:15px/1.45 "Segoe UI",Arial,sans-serif}.wrap{max-width:1120px;margin:auto;padding:26px}.top{display:flex;justify-content:space-between;align-items:center;gap:15px;border-bottom:1px solid var(--line);padding-bottom:16px}.kicker{font-size:10px;letter-spacing:.2em;color:#78ced5}.title{font-size:25px;letter-spacing:.1em;margin:4px 0}.sub,.muted{color:var(--muted)}.sub{font-size:13px}.build{border:1px solid #426875;border-radius:4px;padding:6px 9px;color:#a9dfe2;font-size:11px;letter-spacing:.12em;white-space:nowrap}.panel{margin-top:18px;background:linear-gradient(145deg,#0d1e29,#091720);border:1px solid var(--line);border-radius:8px;padding:17px;box-shadow:0 12px 36px #0005}.panelhead{display:flex;justify-content:space-between;align-items:center;gap:10px;margin-bottom:12px}.screen{border:1px solid #315865;background:#030d13;border-radius:5px;padding:14px}.slots{display:grid;grid-template-columns:repeat(7,minmax(0,1fr));gap:7px}.slot{min-width:0;min-height:88px;border:1px solid #29434e;background:#07151d;border-radius:4px;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:5px}.slot .num{font:11px Consolas,monospace;color:#78939c}.slot .symbol{font-family:SGCGlyph,'Segoe UI Symbol',sans-serif;font-size:39px;line-height:1.1;color:var(--cyan);min-height:43px}.slot.origin{border-color:#8f7443;background:#211b10}.slot.origin .symbol{color:var(--gold)}.slot.empty .symbol{color:#314853}.sequence{margin-top:12px;font:13px Consolas,monospace;color:#a8c3ca;overflow-wrap:anywhere}.status{margin-top:12px;padding:9px 11px;border:1px solid #35515c;background:#09161e;border-radius:4px;color:#a9c0c7;font-size:13px;min-height:39px}.status.warn{border-color:#805147;color:var(--red)}.status.ok{border-color:#376a55;color:var(--green)}.controls{display:flex;gap:8px;flex-wrap:wrap;margin-top:12px}.btn{border:1px solid #426a77;background:#15313d;color:#e0f5f6;padding:9px 13px;border-radius:4px;cursor:pointer}.btn:hover{background:#204653;border-color:#75d2d9}.btn:disabled{opacity:.35;cursor:not-allowed;filter:saturate(.4)}#dialBtn{min-width:210px;font-weight:700;letter-spacing:.16em;background:#1b4652;border-color:#6bcbd5;color:#e8ffff;box-shadow:0 0 22px #46cbd322}.btn.secondary{background:#0c1b24}.entry{width:100%;margin-top:12px;padding:11px 12px;border:1px solid #42616c;border-radius:4px;background:#050f15;color:var(--cyan);font:30px/1.3 SGCGlyph,Consolas,monospace;letter-spacing:5px;outline:none}.entry:focus{border-color:#80dce2;box-shadow:0 0 0 2px #54b5bd22}.entry.codeentry{font:24px/1.3 Consolas,monospace;letter-spacing:2px}.modebar .btn[aria-pressed="true"]{background:#204653;border-color:#75d2d9;color:#fff}#vectorMode[hidden],#glyphMode[hidden]{display:none}.hint{font-size:12px;color:var(--muted);margin:8px 0 0}.keys{display:grid;grid-template-columns:repeat(10,minmax(0,1fr));gap:6px}.key{min-width:0;min-height:59px;padding:5px 2px;border:1px solid #294753;background:#102530;color:#d9edf0;border-radius:5px;cursor:pointer}.key:hover:not(:disabled){border-color:#72d5de;background:#173947}.key:disabled{opacity:.28;cursor:not-allowed;text-decoration:line-through}.key b{display:block;font:24px/1.1 SGCGlyph,Consolas,monospace;min-height:26px;color:var(--cyan)}.key small{display:block;color:#80a3ad;font:10px/1.2 Consolas,monospace;margin-top:4px}.key.reserved{border-color:#8f7443;background:#211b10}.key.reserved b{color:var(--gold)}.map{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:6px}.cell{display:flex;align-items:center;gap:8px;border:1px solid #203e4a;padding:7px;border-radius:4px;min-width:0}.cell code{color:#80dfe6;font-weight:700;min-width:22px}.cell span{font-size:12px;color:#9bb2ba}.footer{margin-top:22px;color:#6f8994;font-size:11px}.tag{font-size:10px;letter-spacing:.12em;color:#b9d4d9}.rules{display:flex;gap:10px;flex-wrap:wrap;margin-top:8px}.rule{font-size:11px;border:1px solid #294653;border-radius:3px;padding:4px 7px;color:#abc1c7}
+@media(max-width:720px){.wrap{padding:13px}.slots{grid-template-columns:repeat(4,minmax(0,1fr))}.keys{grid-template-columns:repeat(5,minmax(0,1fr))}.map{grid-template-columns:repeat(2,minmax(0,1fr))}.slot .symbol{font-size:32px}.title{font-size:20px}}
+</style>
+</head>
+<body>
+<main class="wrap">
+<header class="top"><div><div class="kicker">STARGATE COMMAND · INPUT SYSTEM</div><h1 class="title">SGC GLYPH CONSOLE</h1><div class="sub">Italian QWERTY · Original vector numbering 01–39</div></div><div class="build">INPUT ENGINE 0.5 · DIAL DISPLAY 1.0</div></header>
+<section class="panel">
+ <div class="panelhead"><div class="kicker">DESTINATION ADDRESS · SIX UNIQUE GLYPHS</div><div class="tag" id="count">0 / 6</div></div>
+ <div class="screen"><div class="slots" id="slots"></div><div class="sequence" id="sequence">VECTOR SEQUENCE: —</div></div>
+ <div class="status" id="status" role="status" aria-live="polite">READY · Seleziona sei glifi diversi con la tastiera italiana o con i tasti sullo schermo.</div>
+ <div class="controls modebar" role="group" aria-label="Modalità di inserimento">
+  <button class="btn" id="modeGlyph" aria-pressed="true">TASTIERA GLIFI</button>
+  <button class="btn secondary" id="modeVector" aria-pressed="false">CODICE VETTORIALE</button>
+ </div>
+ <div id="glyphMode">
+  <input id="entry" class="entry" autocomplete="off" autocapitalize="characters" spellcheck="false" maxlength="6" aria-label="Digita i simboli tramite tastiera italiana" placeholder="DIGITA I TASTI SGC" />
+  <p class="hint">Modalità tasti: ogni carattere fisico corrisponde a un singolo glifo secondo la mappatura italiana. Per inserire un indirizzo numerico come 27-07-15-32-12-30, seleziona CODICE VETTORIALE.</p>
+ </div>
+ <div id="vectorMode" hidden>
+  <input id="codeEntry" class="entry codeentry" autocomplete="off" autocapitalize="off" spellcheck="false" maxlength="40" aria-label="Codice vettoriale a sei numeri" placeholder="27-07-15-32-12-30" />
+  <p class="hint">Modalità codice: inserisci sei numeri di vettore separati da trattini, spazi o virgole. Ogni numero identifica un glifo completo, non un singolo carattere. Esempio: 27-07-15-32-12-30.</p>
+  <div class="controls"><button class="btn" id="loadCode">CARICA INDIRIZZO</button><button class="btn secondary" id="sampleCode">PROVA ABYDOS</button></div>
+ </div>
+ <div class="controls"><button class="btn secondary" id="undo">CANCELLA ULTIMO</button><button class="btn secondary" id="clear">CANCELLA TUTTO</button><button class="btn" id="focus">ATTIVA INPUT</button></div>
+ <div class="rules"><span class="rule">6 coordinate uniche</span><span class="rule">Duplicati bloccati</span><span class="rule">Origine: vettore 01</span><span class="rule">01–39 invariati</span></div>
+</section>
+<section class="panel" aria-label="Controlli operatore SGC">
+ <div class="panelhead"><div class="kicker">OPERATOR CONTROL · W. HARRIMAN</div><div class="tag">GATE CONTROL LINK</div></div>
+ <div class="controls" style="align-items:center">
+  <button class="btn" id="dialBtn" disabled>DIALING</button>
+  <span class="hint" id="dialHint">Completa sei coordinate uniche per attivare la schermata di composizione.</span>
+ </div>
+</section>
+<section class="panel"><div class="panelhead"><div class="kicker">ITALIAN KEYBOARD · VIRTUAL INPUT</div><div class="tag">QWERTY</div></div><div class="keys" id="keygrid"></div></section>
+<section class="panel"><div class="panelhead"><div class="kicker">VECTOR INDEX · ORIGINAL NUMBERING</div><div class="tag">39 GLYPHS</div></div><div class="map" id="mapping"></div></section>
+<div class="footer">Fan-made interface for SGC Glyph. Original SVG glyph artwork attribution and licensing are documented in README_IT.md. Not affiliated with MGM or the Stargate rights holders.</div>
+</main>
+<script>
+'use strict';
+const rows=[];
+for(let n=1;n<=39;n++){
+ let key=n<=9?String(n):n===10?'0':n<=36?String.fromCharCode(65+n-11):n===37?',':n===38?'.':'-';
+ rows.push({n,key,vector:String(n).padStart(2,'0')});
+}
+const byKey=new Map(rows.map(r=>[r.key,r]));
+const byVector=new Map(rows.map(r=>[r.vector,r]));
+const selected=[];
+const input=document.getElementById('entry');
+const codeInput=document.getElementById('codeEntry');
+const slots=document.getElementById('slots'),sequence=document.getElementById('sequence'),status=document.getElementById('status'),count=document.getElementById('count');
+const glyphMode=document.getElementById('glyphMode'),vectorMode=document.getElementById('vectorMode');
+const modeGlyph=document.getElementById('modeGlyph'),modeVector=document.getElementById('modeVector');
+const origin=byVector.get('01'); // Vector 01: Earth point of origin; appended as the seventh symbol.
+let activeMode='glyph';
+const dialButton=document.getElementById('dialBtn');
+function setStatus(message,type='') {status.textContent=message;status.className='status'+(type?' '+type:'');}
+function setMode(mode){
+ activeMode=mode;
+ const glyph=mode==='glyph';
+ glyphMode.hidden=!glyph; vectorMode.hidden=glyph;
+ modeGlyph.setAttribute('aria-pressed',String(glyph));
+ modeVector.setAttribute('aria-pressed',String(!glyph));
+ modeGlyph.classList.toggle('secondary',!glyph);
+ modeVector.classList.toggle('secondary',glyph);
+ setStatus(glyph?'GLYPH KEYBOARD · Ogni tasto inserisce un singolo glifo.':'VECTOR CODE · Inserisci sei identificativi numerici completi.');
+ if(glyph) input.focus(); else codeInput.focus();
+}
+function render(){
+ slots.replaceChildren();
+ for(let i=0;i<6;i++){
+  const r=selected[i];const d=document.createElement('div');d.className='slot'+(r?'':' empty');
+  const num=document.createElement('span');num.className='num';num.textContent=r?'VECTOR '+r.vector:'CHEVRON '+(i+1);
+  const sym=document.createElement('span');sym.className='symbol';sym.textContent=r?r.key:'·';
+  d.append(num,sym);slots.append(d);
+ }
+ const od=document.createElement('div');od.className='slot origin';
+ const on=document.createElement('span');on.className='num';on.textContent='ORIGIN · 01';
+ const os=document.createElement('span');os.className='symbol';os.textContent=origin.key;
+ od.append(on,os);slots.append(od);
+ count.textContent=selected.length+' / 6';
+ dialButton.disabled=selected.length!==6;
+ document.getElementById('dialHint').textContent=selected.length===6?'INDIRIZZO COMPLETO · Apri la schermata di composizione SGC.':'Completa ancora '+(6-selected.length)+' coordinate uniche per attivare DIALING.';
+ sequence.textContent='VECTOR SEQUENCE: '+(selected.map(r=>r.vector).concat('01').join(' · '));
+ input.value=selected.map(r=>r.key).join('');
+ document.querySelectorAll('.key').forEach(btn=>{
+   const r=byKey.get(btn.dataset.key);const duplicate=selected.some(x=>x.n===r.n)||r.n===1;
+   btn.disabled=duplicate||selected.length>=6;
+ });
+}
+function addKey(key){
+ const r=byKey.get(String(key).toUpperCase());if(!r)return false;
+ if(r.n===1){setStatus('INPUT RIFIUTATO · Il vettore 01 è già assegnato al punto d’origine terrestre.','warn');return false;}
+ if(selected.some(x=>x.n===r.n)){setStatus('DUPLICATO RIFIUTATO · Il glifo '+r.vector+' è già presente nell’indirizzo.','warn');return false;}
+ if(selected.length>=6){setStatus('INDIRIZZO COMPLETO · Cancella un glifo per modificarlo.','warn');return false;}
+ selected.push(r);render();
+ if(selected.length===6)setStatus('INDIRIZZO COMPLETO · Sei glifi unici. Il punto d’origine 01 è aggiunto come settimo simbolo.','ok');
+ else setStatus('GLIFO '+r.vector+' INSERITO · '+selected.length+' di 6 coordinate.');
+ return true;
+}
+function loadVectorAddress(raw){
+ // A token is a complete vector ID. Separators can be hyphens, whitespace, commas or semicolons.
+ const text=String(raw??'').trim();
+ if(!text){setStatus('CODICE VUOTO · Inserisci sei numeri di vettore.','warn');return false;}
+ const tokens=text.split(/[\s,;|]+|-/).filter(Boolean);
+ if(tokens.length!==6){setStatus('FORMATO NON VALIDO · Servono esattamente sei codici vettoriali separati. Rilevati: '+tokens.length+'.','warn');return false;}
+ if(tokens.some(t=>!/^\d{1,2}$/.test(t))){setStatus('CODICE NON VALIDO · Ogni elemento deve essere un numero da 01 a 39.','warn');return false;}
+ const nums=tokens.map(t=>Number(t));
+ if(nums.some(n=>n<1||n>39)){setStatus('VETTORE INESISTENTE · I codici validi vanno da 01 a 39.','warn');return false;}
+ if(nums.includes(1)){setStatus('ORIGINE RISERVATA · Il vettore 01 viene aggiunto automaticamente come settimo simbolo.','warn');return false;}
+ const normalized=nums.map(n=>String(n).padStart(2,'0'));
+ if(new Set(normalized).size!==6){setStatus('DUPLICATO RIFIUTATO · Un indirizzo deve contenere sei vettori diversi.','warn');return false;}
+ const resolved=normalized.map(v=>byVector.get(v));
+ if(resolved.some(r=>!r)){setStatus('ERRORE DI MAPPATURA · Uno o più vettori non sono presenti nel catalogo.','warn');return false;}
+ selected.splice(0,selected.length,...resolved);
+ render();
+ codeInput.value=normalized.join('-');
+ setStatus('CODICE INTERPRETATO CORRETTAMENTE · '+normalized.join('-')+' → sei glifi distinti; origine 01 aggiunta.','ok');
+ return true;
+}
+function removeLast(){if(!selected.length)return;const r=selected.pop();render();setStatus('GLIFO '+r.vector+' rimosso.');(activeMode==='glyph'?input:codeInput).focus();}
+function clearAll(){selected.length=0;render();codeInput.value='';setStatus('MEMORIA INPUT AZZERATA · Pronto per un nuovo indirizzo.');(activeMode==='glyph'?input:codeInput).focus();}
+input.addEventListener('keydown',e=>{
+ if(e.ctrlKey||e.metaKey||e.altKey)return;
+ if(e.key==='Backspace'){e.preventDefault();removeLast();return;}
+ if(e.key==='Escape'){e.preventDefault();clearAll();return;}
+ if(e.key==='Enter'){e.preventDefault();setStatus(selected.length===6?'INDIRIZZO COMPLETO · Pronto per la verifica.':'INDIRIZZO INCOMPLETO · Mancano '+(6-selected.length)+' glifi.');return;}
+ if(e.key.length===1){e.preventDefault();const k=e.key.toUpperCase();if(byKey.has(k))addKey(k);else setStatus('TASTO NON MAPPATO · Usa i tasti previsti dalla mappatura italiana.','warn');}
+});
+codeInput.addEventListener('keydown',e=>{
+ if(e.key==='Enter'){e.preventDefault();loadVectorAddress(codeInput.value);}
+ if(e.key==='Escape'){e.preventDefault();clearAll();}
+});
+document.getElementById('loadCode').onclick=()=>loadVectorAddress(codeInput.value);
+document.getElementById('sampleCode').onclick=()=>{codeInput.value='27-07-15-32-12-30';loadVectorAddress(codeInput.value);};
+modeGlyph.onclick=()=>setMode('glyph');
+modeVector.onclick=()=>setMode('vector');
+document.getElementById('undo').onclick=removeLast;
+document.getElementById('clear').onclick=clearAll;
+document.getElementById('focus').onclick=()=> (activeMode==='glyph'?input:codeInput).focus();
+function openDialingScreen(){
+ if(selected.length!==6){setStatus('DIALING INIBITO · Sono necessarie sei coordinate valide.','warn');return;}
+ const address=selected.map(r=>r.vector).join('-');
+ const params=new URLSearchParams({address,mode:activeMode});
+ window.location.href='dialing.html?'+params.toString();
+}
+dialButton.addEventListener('click',openDialingScreen);
+const keygrid=document.getElementById('keygrid');
+for(const r of rows){
+ const b=document.createElement('button');b.type='button';b.className='key';b.dataset.key=r.key;b.innerHTML='<b></b><small></small>';
+ b.querySelector('b').textContent=r.key;b.querySelector('small').textContent='VECTOR '+r.vector+(r.n===1?' · ORIGIN':'');
+ b.addEventListener('click',()=>{addKey(r.key);input.focus();});keygrid.append(b);
+}
+const map=document.getElementById('mapping');
+for(const r of rows){const d=document.createElement('div');d.className='cell';const code=document.createElement('code');code.textContent=r.vector;const span=document.createElement('span');span.textContent='Tasto '+r.key+(r.n===1?' · Punto d’origine terrestre':'');d.append(code,span);map.append(d);}
+render();
+const restoreParams=new URLSearchParams(window.location.search);
+const restoreAddress=restoreParams.get('address');
+if(restoreAddress){
+ const ok=loadVectorAddress(restoreAddress);
+ if(ok){const restoredMode=restoreParams.get('mode')==='vector'?'vector':'glyph';setMode(restoredMode);setStatus('INDIRIZZO RIPRISTINATO · '+restoreAddress+' · Pronto per la composizione.','ok');}
+}
+</script>
+</body></html>
